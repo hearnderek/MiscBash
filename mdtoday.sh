@@ -5,7 +5,7 @@ editorcmd=""
 echo "$1"
 case "$1" in
     (--editor=*) {
-        editor=$(echo $1 | awk -F '=' '{ print $2 }')
+        editor=$(echo "$1" | awk -F '=' '{ print $2 }')
     } ;& # fallthrough
     ("") editorcmd='$editor "$file"' ;;
     (--help) {
@@ -32,7 +32,7 @@ esac
 
 today="$(date +%Y%m%d)"
 file="$today.md"
-curdir="$(echo $PWD | awk -F '/' '{print $NF}')"
+curdir="$(echo "$PWD" | awk -F '/' '{print $NF}')"
 
 echo "Today: $today"
 echo "File: $file"
@@ -42,9 +42,11 @@ echo "Editor: $editor"
 if [ ! -f "$file" ]
 then
     touch "$file"
-    echo "# $curdir -- $today" >> "$file"
-    echo "" >> "$file"
-    echo "" >> "$file"
+    {
+        echo "# $curdir -- $today"
+        echo ""
+        echo ""
+    } >> "$file"
 fi
 
-eval $editorcmd
+eval "$editorcmd"
